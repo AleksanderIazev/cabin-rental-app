@@ -38,7 +38,7 @@ function GuestList({ onClick }) {
   return (
     <StyledGuestList>
       <List>
-        {guests.map((guest) => (
+        {guests.map(guest => (
           <GuestListItem
             key={guest.id}
             guest={guest}

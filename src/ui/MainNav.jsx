@@ -1,6 +1,12 @@
-import { NavLink } from "react-router-dom";
-import styled from "styled-components";
-import { HiOutlineHome , HiOutlineCalendarDays, HiOutlineHomeModern, HiOutlineUsers, HiOutlineCog6Tooth} from "react-icons/hi2"
+import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
+import {
+  HiOutlineHome,
+  HiOutlineCalendarDays,
+  HiOutlineHomeModern,
+  HiOutlineUsers,
+  HiOutlineCog6Tooth,
+} from 'react-icons/hi2';
 
 const NavList = styled.ul`
   display: flex;
@@ -47,36 +53,41 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-
 export default function MainNav() {
   return (
     <nav>
-       <NavList>
-        <li><StyledNavLink to='/dashboard'>
-          <HiOutlineHome/>
-          <span>Home</span>
-          </StyledNavLink></li>
-        <li><StyledNavLink to='/bookings'>
-          <HiOutlineCalendarDays/>
-          <span>Bookings</span>
+      <NavList>
+        <li>
+          <StyledNavLink to="/dashboard">
+            <HiOutlineHome />
+            <span>Home</span>
           </StyledNavLink>
         </li>
-        <li><StyledNavLink to='/cabins'>
-          <HiOutlineHomeModern/>
-          <span>Cabins</span>
+        <li>
+          <StyledNavLink to="/bookings">
+            <HiOutlineCalendarDays />
+            <span>Bookings</span>
           </StyledNavLink>
         </li>
-        <li><StyledNavLink to='/users'>
-          <HiOutlineUsers/>
-          <span>Users</span>
+        <li>
+          <StyledNavLink to="/cabins">
+            <HiOutlineHomeModern />
+            <span>Cabins</span>
           </StyledNavLink>
         </li>
-        <li><StyledNavLink to='/settings'>
-          <HiOutlineCog6Tooth/>
-          <span>Settings</span>
+        <li>
+          <StyledNavLink to="/users">
+            <HiOutlineUsers />
+            <span>Users</span>
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/settings">
+            <HiOutlineCog6Tooth />
+            <span>Settings</span>
           </StyledNavLink>
         </li>
       </NavList>
     </nav>
-  )
+  );
 }

@@ -25,7 +25,7 @@ function CreateGuestForm({ onSuccessNewGuest, closeModal }) {
 
   if (isLoadingCountries) return <Spinner />;
 
-  const countryOptions = countries.map((country) => {
+  const countryOptions = countries.map(country => {
     return {
       value: country.name,
       label: country.name,
@@ -35,7 +35,7 @@ function CreateGuestForm({ onSuccessNewGuest, closeModal }) {
 
   const onSubmit = function (data) {
     const countryFlag = countries.find(
-      (country) => country.name === data.nationality
+      country => country.name === data.nationality,
     ).flag;
 
     createGuest(
@@ -43,32 +43,34 @@ function CreateGuestForm({ onSuccessNewGuest, closeModal }) {
       {
         // In the mutate function, we can ALSO use the onSuccess handler, just like in useMutation. Both will get called. This one also gets access to the returned value of the mutation (new guest in this case)
         // This is how we can get access to the newly created object. Here we set it into state, because we want to display it in the UI
-        onSuccess: (data) => {
+        onSuccess: data => {
           // We might want to reuse this form in another place, and then onSuccessNewGuest will not exist
           onSuccessNewGuest?.(data);
 
           // If this component is used OUTSIDE the Modal Context, this will return undefined, so we need to test for this. Instead of if
           closeModal?.();
         },
-      }
+      },
     );
   };
 
   return (
-    <Form type='modal' onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label='Full name' error={errors?.fullName?.message}>
+    <Form type="modal" onSubmit={handleSubmit(onSubmit)}>
+      <FormRow label="Full name" error={errors?.fullName?.message}>
         <Input
-          type='text'
-          id='fullName'
+          type="text"
+          id="fullName"
           disabled={isCreating}
-          {...register('fullName', { required: 'This field is required' })}
+          {...register('fullName', {
+            required: 'This field is required',
+          })}
         />
       </FormRow>
 
-      <FormRow label='Email address' error={errors?.email?.message}>
+      <FormRow label="Email address" error={errors?.email?.message}>
         <Input
-          type='email'
-          id='email'
+          type="email"
+          id="email"
           disabled={isCreating}
           {...register('email', {
             required: 'Email address is required',
@@ -81,31 +83,35 @@ function CreateGuestForm({ onSuccessNewGuest, closeModal }) {
         />
       </FormRow>
 
-      <FormRow label='Nationality' error={errors?.nationality?.message}>
+      <FormRow label="Nationality" error={errors?.nationality?.message}>
         <FormSelect
-          id='nationality'
+          id="nationality"
           disabled={isCreating}
           options={[
             { value: '', label: 'Select nationality...' },
             ...countryOptions,
           ]}
-          {...register('nationality', { required: 'This field is required' })}
+          {...register('nationality', {
+            required: 'This field is required',
+          })}
         ></FormSelect>
       </FormRow>
 
-      <FormRow label='National ID' error={errors?.nationalID?.message}>
+      <FormRow label="National ID" error={errors?.nationalID?.message}>
         <Input
-          type='text'
+          type="text"
           disabled={isCreating}
-          id='nationalID'
-          {...register('nationalID', { required: 'This field is required' })}
+          id="nationalID"
+          {...register('nationalID', {
+            required: 'This field is required',
+          })}
         />
       </FormRow>
 
       <FormRow>
         <Button
-          variation='secondary'
-          type='reset'
+          variation="secondary"
+          type="reset"
           disabled={isCreating}
           onClick={() => closeModal?.()}
         >

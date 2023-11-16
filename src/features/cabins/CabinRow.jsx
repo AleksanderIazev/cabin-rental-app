@@ -1,8 +1,11 @@
-import styled from "styled-components";
-import { formatCurrency } from '../../utils/helpers'
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteCabin } from "../../services/apiCabins";
-import toast from "react-hot-toast";
+import styled from 'styled-components';
+import { useState } from 'react';
+import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
+
+import { useDeleteCabin } from './useDeleteCabin';
+import CreateCabinForm from './CreateCabinForm';
+import { formatCurrency } from '../../utils/helpers';
+import { useCreateCabin } from './useCreateCabin';
 
 const TableRow = styled.div`
   display: grid;
@@ -29,50 +32,79 @@ const Cabin = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
   color: var(--color-grey-600);
-  font-family: "Sono";
+  font-family: 'Sono';
 `;
 
 const Price = styled.div`
-  font-family: "Sono";
+  font-family: 'Sono';
   font-weight: 600;
 `;
 
 const Discount = styled.div`
-  font-family: "Sono";
+  font-family: 'Sono';
   font-weight: 500;
   color: var(--color-green-700);
 `;
 
-
-
 // eslint-disable-next-line react/prop-types
-export default function CabinRow({cabin}){
-
+export default function CabinRow({ cabin }) {
+  const [showForm, setShowForm] = useState(false);
+  const { isDeleting, deleteCabin } = useDeleteCabin();
+  const { isCreating, createCabin } = useCreateCabin();
   // eslint-disable-next-line react/prop-types
-  const {id:cabinId, name, maxCapacity,regularPrice, discount, image} = cabin;
 
-  const queryClient = useQueryClient()
+  const {
+    id: cabinId,
+    name,
+    maxCapacity,
+    regularPrice,
+    discount,
+    image,
+    description,
+  } = cabin;
 
-  const {isLoading: isDeleting, mutate } = useMutation({
-    mutationFn:deleteCabin,
+  function checkName(name) {
+    return name.split(' ').includes('Copy') ? name : `Copy of ${name}`;
+  }
 
-    onSuccess: () => {
-      toast.success('Домик успешно удалён');
-      queryClient.invalidateQueries({
-        queryKey:['cabins']
-      })
-    },
-    onError:(err) => toast.error(err.message)
-  })
-  
+  function handleDuplicate() {
+    createCabin({
+      name: checkName(name),
+      maxCapacity,
+      regularPrice,
+      discount,
+      image,
+      description,
+    });
+  }
+
+  //Кастомный хук на удаление домика
+
   return (
-    <TableRow role='row'>
-      <Img src={image}/>
-      <Cabin>{name}</Cabin>
-      <div>Fits up to {maxCapacity} guests</div>
-      <Price>{formatCurrency(regularPrice)}</Price>
-      <Discount>{formatCurrency(discount)}</Discount>
-      <button onClick={() => mutate(cabinId)} disabled={isDeleting}>Delete</button>
-    </TableRow>
-  )
+    <>
+      <TableRow role="row">
+        <Img src={image} />
+        <Cabin>{name}</Cabin>
+        <div>Fits up to {maxCapacity} guests</div>
+        <Price>{formatCurrency(regularPrice)}</Price>
+        {discount ? (
+          <Discount>{formatCurrency(discount)}</Discount>
+        ) : (
+          <span>&mdash;</span>
+        )}
+        <div>
+          <button disabled={isCreating} onClick={handleDuplicate}>
+            <HiSquare2Stack />
+          </button>
+          <button onClick={() => setShowForm(show => !show)}>
+            <HiPencil />
+          </button>
+          <button onClick={() => deleteCabin(cabinId)} disabled={isDeleting}>
+            <HiTrash />
+          </button>
+        </div>
+      </TableRow>
+      {showForm && <CreateCabinForm cabinToEdit={cabin} />}
+    </>
+  );
 }
