@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 
-import CreateCabinForm from './CreateCabinForm';
-import { useDeleteCabin } from './useDeleteCabin';
-import { formatCurrency } from '../../utils/helpers';
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2';
+
+import { useDeleteCabin } from './useDeleteCabin';
+import CreateCabinForm from './CreateCabinForm';
+import { formatCurrency } from '../../utils/helpers';
 import { useCreateCabin } from './useCreateCabin';
 import Modal from '../../ui/Modal';
 import ConfirmDelete from '../../ui/ConfirmDelete';
@@ -49,9 +50,11 @@ const Discount = styled.div`
   color: var(--color-green-700);
 `;
 
-function CabinRow({ cabin }) {
+// eslint-disable-next-line react/prop-types
+export default function CabinRow({ cabin }) {
   const { isDeleting, deleteCabin } = useDeleteCabin();
   const { isCreating, createCabin } = useCreateCabin();
+  // eslint-disable-next-line react/prop-types
 
   const {
     id: cabinId,
@@ -63,9 +66,13 @@ function CabinRow({ cabin }) {
     description,
   } = cabin;
 
+  function checkName(name) {
+    return name.split(' ').includes('Copy') ? name : `Copy of ${name}`;
+  }
+
   function handleDuplicate() {
     createCabin({
-      name: `Copy of ${name}`,
+      name: checkName(name),
       maxCapacity,
       regularPrice,
       discount,
@@ -73,6 +80,8 @@ function CabinRow({ cabin }) {
       description,
     });
   }
+
+  //Кастомный хук на удаление домика
 
   return (
     <Table.Row>
@@ -89,13 +98,8 @@ function CabinRow({ cabin }) {
         <Modal>
           <Menus.Menu>
             <Menus.Toggle id={cabinId} />
-
             <Menus.List id={cabinId}>
-              <Menus.Button
-                icon={<HiSquare2Stack />}
-                onClick={handleDuplicate}
-                disabled={isCreating}
-              >
+              <Menus.Button icon={<HiSquare2Stack />} onClick={handleDuplicate}>
                 Duplicate
               </Menus.Button>
 
@@ -103,7 +107,7 @@ function CabinRow({ cabin }) {
                 <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
               </Modal.Open>
 
-              <Modal.Open opens="delete">
+              <Modal.Open name="delete">
                 <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
               </Modal.Open>
             </Menus.List>
@@ -125,5 +129,3 @@ function CabinRow({ cabin }) {
     </Table.Row>
   );
 }
-
-export default CabinRow;
