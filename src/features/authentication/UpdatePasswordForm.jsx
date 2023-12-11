@@ -19,7 +19,7 @@ function UpdatePasswordForm() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <FormRow
-        label="Password (min 8 characters)"
+        label="New password (min 8 chars)"
         error={errors?.password?.message}
       >
         <Input
@@ -28,10 +28,10 @@ function UpdatePasswordForm() {
           autoComplete="current-password"
           disabled={isUpdating}
           {...register('password', {
-            required: 'This field is required',
+            required: 'Это поле обязательно к заполнению',
             minLength: {
               value: 8,
-              message: 'Password needs a minimum of 8 characters',
+              message: 'Пароль должен быть не менее 8 символов',
             },
           })}
         />
@@ -47,9 +47,9 @@ function UpdatePasswordForm() {
           id="passwordConfirm"
           disabled={isUpdating}
           {...register('passwordConfirm', {
-            required: 'This field is required',
+            required: 'Это поле обязательно к заполнению',
             validate: value =>
-              getValues().password === value || 'Passwords need to match',
+              getValues().password === value || 'Пароли должны совпадать',
           })}
         />
       </FormRow>
