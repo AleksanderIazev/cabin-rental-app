@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import BookingDataBox from './BookingDataBox';
 import Row from '../../ui/Row';
 import Heading from '../../ui/Heading';
+import Empty from '../../ui/Empty';
 import Spinner from '../../ui/Spinner';
 import Tag from '../../ui/Tag';
 import ButtonGroup from '../../ui/ButtonGroup';
@@ -32,6 +33,7 @@ function BookingDetail() {
   const navigate = useNavigate();
 
   if (isLoading) return <Spinner />;
+  if (!booking) return <Empty resourseName="booking" />;
 
   const { status, id: bookingId } = booking;
 
